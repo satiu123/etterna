@@ -18,6 +18,9 @@ LoadFromDir(const std::string& sPath, Song& out);
 bool
 LoadNoteDataFromSimfile(const std::string& path, Steps& out);
 
+void
+ProcessDanPacks(const std::string& baseDir);
+
 } // namespace MalodyLoader
 
 #endif

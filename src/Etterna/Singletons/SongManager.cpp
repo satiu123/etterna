@@ -8,6 +8,7 @@
 #include "Etterna/Models/Misc/LocalizedString.h"
 #include "NoteSkinManager.h"
 #include "Etterna/Models/NoteLoaders/NotesLoaderDWI.h"
+#include "Etterna/Models/NoteLoaders/NotesLoaderMALODY.h"
 #include "Etterna/Models/NoteWriters/NotesWriterSSC.h"
 #include "PrefsManager.h"
 #include "Etterna/Models/Misc/Profile.h"
@@ -241,6 +242,8 @@ SongManager::DifferentialReloadDir(string dir) -> int
 	if (dir.back() != '/') {
 		dir += "/";
 	}
+
+	MalodyLoader::ProcessDanPacks(dir);
 
 	auto newsongs = 0;
 
@@ -951,6 +954,7 @@ void
 SongManager::LoadStepManiaSongDir(std::string sDir, LoadingWindow* ld)
 {
 	Locator::getLogger()->info("LoadStepmaniaSongDir Starting: {}", sDir);
+	MalodyLoader::ProcessDanPacks(sDir);
 	std::vector<std::string> songFolders;
 	FILEMAN->GetDirListing(sDir + "*", songFolders, ONLY_DIR);
 	if (ld != nullptr) {
