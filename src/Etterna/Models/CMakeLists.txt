@@ -46,7 +46,8 @@ list(APPEND NOTELOAD_SRC
 	"NoteLoaders/NotesLoaderSMA.cpp"
 	"NoteLoaders/NotesLoaderSSC.cpp"
 	"NoteLoaders/NotesLoaderETT.cpp"
-	"NoteLoaders/NotesLoaderOSU.cpp")
+	"NoteLoaders/NotesLoaderOSU.cpp"
+	"NoteLoaders/NotesLoaderMALODY.cpp")
 
 list(APPEND NOTELOAD_HPP
 	"NoteLoaders/NotesLoader.h"
@@ -57,7 +58,8 @@ list(APPEND NOTELOAD_HPP
 	"NoteLoaders/NotesLoaderSMA.h"
 	"NoteLoaders/NotesLoaderSSC.h"
 	"NoteLoaders/NotesLoaderETT.h"
-	"NoteLoaders/NotesLoaderOSU.h")
+	"NoteLoaders/NotesLoaderOSU.h"
+	"NoteLoaders/NotesLoaderMALODY.h")
 
 list(APPEND NOTEWRITE_SRC
 	"NoteWriters/NotesWriterDWI.cpp"

@@ -8,6 +8,8 @@
 /.kdev4
 /[Bb]uild
 /out/
+/.cmake/
+/Malody谱面/
 
 # Ignore executables (Linux, macOS, Windows)
 /Etterna

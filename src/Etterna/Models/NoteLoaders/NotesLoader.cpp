@@ -6,8 +6,8 @@
 #include "NotesLoaderSM.h"
 #include "NotesLoaderSMA.h"
 #include "NotesLoaderSSC.h"
-#include "RageUtil/Utils/RageUtil.h"
 #include "NotesLoaderOSU.h"
+#include "NotesLoaderMALODY.h"
 
 void
 NotesLoader::GetMainAndSubTitlesFromFullTitle(const std::string& sFullTitle,
@@ -70,5 +70,8 @@ NotesLoader::LoadFromDir(const std::string& sPath,
 	OsuLoader::GetApplicableFiles(sPath, list);
 	if (!list.empty())
 		return OsuLoader::LoadFromDir(sPath, out);
+	MalodyLoader::GetApplicableFiles(sPath, list);
+	if (!list.empty())
+		return MalodyLoader::LoadFromDir(sPath, out);
 	return false;
 }

@@ -22,6 +22,7 @@
 #include "Etterna/Models/NoteLoaders/NotesLoaderDWI.h"
 #include "Etterna/Models/NoteLoaders/NotesLoaderKSF.h"
 #include "Etterna/Models/NoteLoaders/NotesLoaderOSU.h"
+#include "Etterna/Models/NoteLoaders/NotesLoaderMALODY.h"
 #include "Etterna/Models/NoteLoaders/NotesLoaderSM.h"
 #include "Etterna/Models/NoteLoaders/NotesLoaderSMA.h"
 #include "Etterna/Models/NoteLoaders/NotesLoaderSSC.h"
@@ -162,6 +163,8 @@ Steps::GetNoteDataFromSimfile() -> bool
 		return BMSLoader::LoadNoteDataFromSimfile(stepFile, *this);
 	} else if (extension == "osu") {
 		return OsuLoader::LoadNoteDataFromSimfile(stepFile, *this);
+	} else if (extension == "mc") {
+		return MalodyLoader::LoadNoteDataFromSimfile(stepFile, *this);
 	} else if (extension == "edit") {
 		// Try SSC, then fallback to SM.
 		SSCLoader ldSSC;

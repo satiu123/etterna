@@ -343,7 +343,7 @@ Song::LoadFromSongDir(std::string sDir, Calc* calc)
 			  sDir);
 		} else {
 			Locator::getLogger()->info("Song {} has no SSC, SM, SMA, DWI, BMS, "
-									   "KSF, or OSU files - ignoring",
+									   "KSF, OSU, or MC files - ignoring",
 									   sDir);
 		}
 		return false;
@@ -1158,6 +1158,7 @@ Song::Save()
 	FILEMAN->GetDirListing(m_sSongDir + "*.sm", arrayOldFileNames);
 	FILEMAN->GetDirListing(m_sSongDir + "*.dwi", arrayOldFileNames);
 	FILEMAN->GetDirListing(m_sSongDir + "*.osu", arrayOldFileNames);
+	FILEMAN->GetDirListing(m_sSongDir + "*.mc", arrayOldFileNames);
 	for (auto& arrayOldFileName : arrayOldFileNames) {
 		const auto sOldPath = m_sSongDir + arrayOldFileName;
 		const auto sNewPath = sOldPath + ".old";
@@ -1206,7 +1207,8 @@ Song::GetStepsToSave(bool bSavingCache, const std::string& path)
 	for (auto& s : m_vpSteps) {
 
 		if (!bSavingCache) {
-			if (GetExtension(s->GetFilename()) != "osu")
+			const auto ext = GetExtension(s->GetFilename());
+			if (ext != "osu" && ext != "mc")
 				s->SetFilename(path);
 		}
 		vpStepsToSave.push_back(s);
