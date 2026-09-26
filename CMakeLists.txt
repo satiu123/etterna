@@ -86,7 +86,7 @@ if (WIN32 OR APPLE)
 endif()
 set(OPENSSL_MSVC_STATIC_RT ON CACHE BOOL "" FORCE)
 
-find_package(OpenSSL 3.5 REQUIRED)
+find_package(OpenSSL 3.0 REQUIRED)
 find_package(Threads REQUIRED)
 target_link_libraries(Etterna PRIVATE Threads::Threads)
 target_link_libraries(Etterna PRIVATE OpenSSL::SSL)
@@ -177,6 +177,8 @@ elseif(UNIX)
         target_link_libraries(Etterna PRIVATE ffmpeg)
 	endif()
     include(CMake/Helpers/CMakeLinux.cmake)
+    set_target_properties(Etterna PROPERTIES BUILD_RPATH "\$ORIGIN/extern/discord/lib/release;\$ORIGIN/extern/ffmpeg/linux-lib")
+    target_link_options(Etterna PRIVATE "-Wl,--disable-new-dtags")
 endif()
 
 ## Source - Add source to the Etterna target

@@ -32,6 +32,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libvorbis-dev \
     libcurl4-openssl-dev \
     libglew-dev \
+    libmp3lame-dev \
+    libslang2-dev \
     xorg-dev \
     && rm -rf /var/lib/apt/lists/*
 

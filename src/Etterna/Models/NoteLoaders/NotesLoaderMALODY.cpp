@@ -1,6 +1,7 @@
 #include "Etterna/Globals/global.h"
 #include "NotesLoaderMALODY.h"
 #include "Etterna/Actor/Base/ActorUtil.h"
+#include "Etterna/Models/Misc/BackgroundUtil.h"
 #include "Etterna/Models/Misc/Difficulty.h"
 #include "Etterna/Models/NoteData/NoteData.h"
 #include "Etterna/Models/Songs/Song.h"

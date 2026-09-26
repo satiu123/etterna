@@ -17,7 +17,7 @@ podman run --rm \
     -v "${SCRIPT_DIR}:/workspace:Z" \
     -w /workspace \
     "${IMAGE_NAME}" \
-    cmake -B build -G Ninja -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" -DWITH_CRASHPAD=OFF
+    cmake -B build -G Ninja -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" -DWITH_CRASHPAD=OFF -DWITH_VULKAN=OFF
 
 echo "==> 开始编译 Etterna (Ninja)..."
 podman run --rm \
