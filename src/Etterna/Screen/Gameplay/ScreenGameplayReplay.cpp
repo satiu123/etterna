@@ -24,6 +24,7 @@
 #include "Etterna/Singletons/LuaManager.h"
 #include "Etterna/Models/Misc/PlayerState.h"
 #include "Etterna/Models/Songs/SongOptions.h"
+#include "RageUtil/Misc/RageInput.h"
 
 REGISTER_SCREEN_CLASS(ScreenGameplayReplay);
 
@@ -292,6 +293,21 @@ ScreenGameplayReplay::Input(const InputEventPlus& input) -> bool
 	Message msg("");
 	if (m_Codes.InputMessage(input, msg)) {
 		this->HandleMessage(msg);
+	}
+
+	// Skip intro if Space or Tab (keyboard) or Select (controller) is pressed
+	if (input.type == IET_FIRST_PRESS) {
+		bool bIsSkipKey = false;
+		if (input.DeviceI.device == DEVICE_KEYBOARD &&
+			(input.DeviceI.button == KEY_SPACE || input.DeviceI.button == KEY_TAB)) {
+			bIsSkipKey = true;
+		} else if (input.MenuI == GAME_BUTTON_SELECT) {
+			bIsSkipKey = true;
+		}
+
+		if (bIsSkipKey && SkipIntro()) {
+			return true;
+		}
 	}
 
 	if (m_DancingState != STATE_OUTRO && GAMESTATE->IsHumanPlayer(input.pn) &&

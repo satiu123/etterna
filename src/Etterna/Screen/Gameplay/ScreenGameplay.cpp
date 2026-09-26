@@ -834,6 +834,52 @@ ScreenGameplay::UpdateSongPosition()
 	  fSeconds, GAMESTATE->m_pCurSong->m_SongTiming, tm);
 }
 
+auto
+ScreenGameplay::SkipIntro() -> bool
+{
+	if (m_DancingState == STATE_OUTRO || m_Cancel.IsTransitioning() ||
+		GAMESTATE->GetPaused() || m_gave_up ||
+		GAMESTATE->m_pCurSong == nullptr || GAMESTATE->m_pCurSteps == nullptr ||
+		m_pSoundMusic == nullptr || !m_pSoundMusic->IsPlaying()) {
+		return false;
+	}
+
+	float fFirstSecond = GAMESTATE->m_pCurSteps->firstsecond;
+	if (fFirstSecond <= 0.0f && GAMESTATE->m_pCurSong != nullptr) {
+		fFirstSecond = GAMESTATE->m_pCurSong->GetFirstSecond();
+	}
+
+	const float fLeadIn = 2.0f;
+	if (fFirstSecond > 2.5f &&
+		GAMESTATE->m_Position.m_fMusicSeconds < fFirstSecond - 2.5f) {
+		const float targetSeconds = std::max(0.0f, fFirstSecond - fLeadIn);
+
+		if (m_DancingState == STATE_INTRO) {
+		m_Ready.FinishTweening();
+		m_Go.FinishTweening();
+		GAMESTATE->m_DanceStartTime.Touch();
+		GAMESTATE->m_bGameplayLeadIn.Set(false);
+		m_DancingState = STATE_DANCING;
+		TriggerDiscordRPCUpdate();
+		}
+
+		SOUND->SetSoundPosition(m_pSoundMusic, targetSeconds);
+		for (auto& pi : m_vPlayerInfo) {
+			if (pi.m_pPlayer != nullptr) {
+				pi.m_pPlayer->RenderAllNotesIgnoreScores();
+			}
+		}
+		m_bZeroDeltaOnNextUpdate = true;
+		GAMESTATE->m_Position.m_fMusicSeconds = targetSeconds;
+		UpdateSongPosition();
+		SCREENMAN->SystemMessage("Intro Skipped");
+		MESSAGEMAN->Broadcast("IntroSkipped");
+		return true;
+	}
+
+	return false;
+}
+
 void
 ScreenGameplay::BeginScreen()
 {
@@ -1387,6 +1433,21 @@ ScreenGameplay::Input(const InputEventPlus& input) -> bool
 	Message msg("");
 	if (m_Codes.InputMessage(input, msg)) {
 		this->HandleMessage(msg);
+	}
+
+	// Skip intro if Space or Tab (keyboard) or Select (controller) is pressed
+	if (input.type == IET_FIRST_PRESS) {
+		bool bIsSkipKey = false;
+		if (input.DeviceI.device == DEVICE_KEYBOARD &&
+			(input.DeviceI.button == KEY_SPACE || input.DeviceI.button == KEY_TAB)) {
+			bIsSkipKey = true;
+		} else if (input.MenuI == GAME_BUTTON_SELECT) {
+			bIsSkipKey = true;
+		}
+
+		if (bIsSkipKey && SkipIntro()) {
+			return true;
+		}
 	}
 
 	if (m_DancingState != STATE_OUTRO && GAMESTATE->IsHumanPlayer(input.pn) &&
@@ -2058,6 +2119,11 @@ class LunaScreenGameplay : public Luna<ScreenGameplay>
 		lua_pushnumber(L, pos);
 		return 1;
 	}
+	static auto SkipIntro(T* p, lua_State* L) -> int
+	{
+		lua_pushboolean(L, p->SkipIntro());
+		return 1;
+	}
 
 	LunaScreenGameplay()
 	{
@@ -2068,6 +2134,7 @@ class LunaScreenGameplay : public Luna<ScreenGameplay>
 		ADD_METHOD(begin_backing_out);
 		ADD_METHOD(GetTrueBPS);
 		ADD_METHOD(GetSongPosition);
+		ADD_METHOD(SkipIntro);
 	}
 };
 

@@ -62,6 +62,8 @@ class ScreenGameplay : public ScreenWithMenuElements
 	// Get current position of the song during gameplay
 	const float GetSongPosition();
 
+	auto SkipIntro() -> bool;
+
   protected:
 	virtual void UpdateStageStats(
 	  MultiPlayer /* mp */){}; // overridden for multiplayer
