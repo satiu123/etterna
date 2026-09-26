@@ -870,12 +870,16 @@ ScreenManager::SendMessageToTopScreen(ScreenMessage SM)
 }
 
 void
-ScreenManager::SystemMessage(const std::string& sMessage)
+ScreenManager::SystemMessage(const std::string& sMessage, float fDuration)
 {
 	Locator::getLogger()->info("{}", sMessage.c_str());
 	Message msg("SystemMessage");
 	msg.SetParam("Message", sMessage);
 	msg.SetParam("NoAnimate", false);
+	if (fDuration >= 0.0f) {
+		msg.SetParam("Duration", fDuration);
+		msg.SetParam("Fade", 0.2f);
+	}
 	MESSAGEMAN->Broadcast(msg);
 }
 
@@ -1002,7 +1006,11 @@ class LunaScreenManager : public Luna<ScreenManager>
 	}
 	static int SystemMessage(T* p, lua_State* L)
 	{
-		p->SystemMessage(SArg(1));
+		float fDuration = -1.0f;
+		if (lua_gettop(L) >= 2 && !lua_isnil(L, 2)) {
+			fDuration = static_cast<float>(lua_tonumber(L, 2));
+		}
+		p->SystemMessage(SArg(1), fDuration);
 		COMMON_RETURN_SELF;
 	}
 	static int ScreenIsPrepped(T* p, lua_State* L)

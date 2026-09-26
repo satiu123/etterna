@@ -72,6 +72,7 @@ AutoScreenMessage(SM_DoNextScreen);
 // received while STATE_INTRO
 AutoScreenMessage(SM_StartHereWeGo);
 AutoScreenMessage(SM_StopHereWeGo);
+AutoScreenMessage(SM_HideIntroSkipped);
 
 static Preference<bool> g_bCenter1Player("Center1Player", true);
 static Preference<bool> g_bShowLyrics("ShowLyrics", false);
@@ -872,7 +873,8 @@ ScreenGameplay::SkipIntro() -> bool
 		m_bZeroDeltaOnNextUpdate = true;
 		GAMESTATE->m_Position.m_fMusicSeconds = targetSeconds;
 		UpdateSongPosition();
-		SCREENMAN->SystemMessage("Intro Skipped");
+		SCREENMAN->SystemMessage("Intro Skipped", 0.4f);
+		this->PostScreenMessage(SM_HideIntroSkipped, 0.6f);
 		MESSAGEMAN->Broadcast("IntroSkipped");
 		return true;
 	}
@@ -1730,6 +1732,9 @@ ScreenGameplay::HandleScreenMessage(const ScreenMessage& SM)
 {
 	Locator::getLogger()->trace("HandleScreenMessage({})",
 			   ScreenMessageHelpers::ScreenMessageToString(SM).c_str());
+	if (SM == SM_HideIntroSkipped) {
+		SCREENMAN->HideSystemMessage();
+	}
 	if (SM == SM_DoneFadingIn) {
 		// If the ready animation is zero length, then playing the sound will
 		// make it overlap with the go sound.

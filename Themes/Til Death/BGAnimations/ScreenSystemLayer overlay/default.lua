@@ -11,8 +11,10 @@ t[#t + 1] =
 		OnCommand = function(self)
 			self:finishtweening():diffusealpha(0.85)
 		end,
-		OffCommand = function(self)
-			self:sleep(3):linear(0.5):diffusealpha(0)
+		OffCommand = function(self, params)
+			local dur = (params and params.Duration) or 3
+			local fade = (params and params.Fade) or 0.5
+			self:sleep(dur):linear(fade):diffusealpha(0)
 		end
 	},
 	Def.BitmapText {
@@ -26,8 +28,10 @@ t[#t + 1] =
 		OnCommand = function(self)
 			self:finishtweening():diffusealpha(1):zoom(0.5)
 		end,
-		OffCommand = function(self)
-			self:sleep(3):linear(0.5):diffusealpha(0)
+		OffCommand = function(self, params)
+			local dur = (params and params.Duration) or 3
+			local fade = (params and params.Fade) or 0.5
+			self:sleep(dur):linear(fade):diffusealpha(0)
 		end
 	},
 	SystemMessageMessageCommand = function(self, params)
@@ -36,7 +40,7 @@ t[#t + 1] =
 		if params.NoAnimate then
 			self:finishtweening()
 		end
-		self:playcommand("Off")
+		self:playcommand("Off", params)
 	end,
 	HideSystemMessageMessageCommand = function(self)
 		self:finishtweening()

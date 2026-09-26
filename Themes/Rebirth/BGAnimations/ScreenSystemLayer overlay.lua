@@ -19,8 +19,10 @@ t[#t + 1] = Def.ActorFrame {
             self:finishtweening()
             self:diffusealpha(0.85)
         end,
-        OffCommand = function(self)
-            self:sleep(3):linear(0.5)
+        OffCommand = function(self, params)
+            local dur = (params and params.Duration) or 3
+            local fade = (params and params.Fade) or 0.5
+            self:sleep(dur):linear(fade)
             self:diffusealpha(0)
         end
     },
@@ -38,8 +40,10 @@ t[#t + 1] = Def.ActorFrame {
             self:diffusealpha(1)
             self:zoom(0.5)
         end,
-        OffCommand = function(self)
-            self:sleep(3):linear(0.5)
+        OffCommand = function(self, params)
+            local dur = (params and params.Duration) or 3
+            local fade = (params and params.Fade) or 0.5
+            self:sleep(dur):linear(fade)
             self:diffusealpha(0)
         end
     },
@@ -49,7 +53,7 @@ t[#t + 1] = Def.ActorFrame {
         if params.NoAnimate then
             self:finishtweening()
         end
-        self:playcommand("Off")
+        self:playcommand("Off", params)
     end,
     HideSystemMessageMessageCommand = function(self)
         self:finishtweening()

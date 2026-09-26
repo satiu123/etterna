@@ -45,7 +45,7 @@ class ScreenManager
 	auto IsScreenNameValid(std::string const& name) const -> bool;
 
 	// System messages
-	void SystemMessage(const std::string& sMessage);
+	void SystemMessage(const std::string& sMessage, float fDuration = -1.0f);
 	void SystemMessageNoAnimate(const std::string& sMessage);
 	void HideSystemMessage();
 
